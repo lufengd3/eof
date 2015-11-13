@@ -1,0 +1,2 @@
+- [W3C Shadown DOM specification](http://www.w3.org/TR/shadow-dom/)
+- [Shadow DOM 101](http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/)

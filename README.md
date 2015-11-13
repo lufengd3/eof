@@ -1,2 +1,2 @@
-# graduation-project
-毕业设计
+# EOF
+快餐店长de毕业设计
