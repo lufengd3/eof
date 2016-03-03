@@ -1,2 +1,5 @@
+- [Web Components specifications](https://github.com/w3c/webcomponents)
 - [W3C Shadown DOM specification](http://www.w3.org/TR/shadow-dom/)
 - [Shadow DOM 101](http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/)
+- [A Guide to Web Components](https://css-tricks.com/modular-future-web-components/)
+- [漫谈Web前端的组件化](http://leeluolee.github.io/fequan-netease/)
