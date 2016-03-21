@@ -6,8 +6,11 @@
 - [A Guide to Web Components](https://css-tricks.com/modular-future-web-components/)
 
 
-###框架设计
+### 框架设计
 - [漫谈Web前端的组件化](http://leeluolee.github.io/fequan-netease/)
 
 ### React
--[React Demystified](http://blog.reverberate.org/2014/02/react-demystified.html)
+- [React Demystified](http://blog.reverberate.org/2014/02/react-demystified.html)
+
+### Polymer
+- [和Polymer一起加入Web组件革命](https://www.ibm.com/developerworks/cn/web/wa-polymer/)
