@@ -4,6 +4,7 @@
 - [W3C Shadown DOM specification](http://www.w3.org/TR/shadow-dom/)
 - [Shadow DOM 101](http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/)
 - [A Guide to Web Components](https://css-tricks.com/modular-future-web-components/)
+- [Custom Elements](https://www.w3.org/TR/custom-elements/)
 
 
 ### 框架设计
@@ -14,3 +15,4 @@
 
 ### Polymer
 - [和Polymer一起加入Web组件革命](https://www.ibm.com/developerworks/cn/web/wa-polymer/)
+- [What is shady DOM?](https://www.polymer-project.org/1.0/articles/shadydom.html)
