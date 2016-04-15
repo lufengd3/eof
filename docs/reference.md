@@ -16,3 +16,4 @@
 ### Polymer
 - [和Polymer一起加入Web组件革命](https://www.ibm.com/developerworks/cn/web/wa-polymer/)
 - [What is shady DOM?](https://www.polymer-project.org/1.0/articles/shadydom.html)
+- [An evaluation of polymer-micro as a minimal web component framework](https://component.kitchen/blog/posts/an-evaluation-of-polymer-micro-as-a-minimal-web-component-framework)
