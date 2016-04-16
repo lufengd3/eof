@@ -1,10 +1,13 @@
-### Web Components & Shadow DOM
+### Web Components
 - [Web Components specifications](https://github.com/w3c/webcomponents)
 - [Web Components wiki](http://www.w3.org/wiki/WebComponents/)
 - [W3C Shadown DOM specification](http://www.w3.org/TR/shadow-dom/)
 - [Shadow DOM 101](http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/)
 - [A Guide to Web Components](https://css-tricks.com/modular-future-web-components/)
-- [Custom Elements](https://www.w3.org/TR/custom-elements/)
+- [W3C Custom Elements specification](https://www.w3.org/TR/custom-elements/)
+- [W3C Html Imports specification](https://www.w3.org/TR/html-imports/)
+- [The template element](https://www.w3.org/TR/html5/scripting-1.html#the-template-element)
+- [HTML New Template Tag](http://www.html5rocks.com/en/tutorials/webcomponents/template/)
 
 
 ### 框架设计
