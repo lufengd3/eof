@@ -1,0 +1,39 @@
+<template id="sideNavTpl">
+    <style>
+        :host {
+            --btn-color: green;
+        }
+
+        :host-context(.red) {
+            --btn-color: red;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 136px;
+            height: 46px;
+            line-height: 46px;
+            border: 1px solid black;
+            text-align: center;
+            color: var(--btn-color);
+        }
+    </style>
+    <div class="btn" >
+        <content></content>
+    </div>
+    xxx
+</template>
+
+<script>
+    var proto = Object.create(HTMLElement.prototype, {
+        createdCallback: {
+            value: function() {
+                let tpl = document.currentScript.ownerDocument.querySelector('#sideNavTpl');
+                let clone = document.importNode(tpl.content, true);
+                this.createShadowRoot().appendChild(clone);
+            }
+        }        
+    });
+
+    document.registerElement('cate-button', {prototype: proto});
+</script>
