@@ -1,4 +1,4 @@
-<template id="sideNavTpl">
+<template is="cate-button">
     <style>
         :host {
             --btn-color: green;
@@ -25,15 +25,9 @@
 </template>
 
 <script>
-    var proto = Object.create(HTMLElement.prototype, {
-        createdCallback: {
-            value: function() {
-                let tpl = document.currentScript.ownerDocument.querySelector('#sideNavTpl');
-                let clone = document.importNode(tpl.content, true);
-                this.createShadowRoot().appendChild(clone);
-            }
-        }        
+(function() {
+    EOF({
+        is: 'cate-button'
     });
-
-    document.registerElement('cate-button', {prototype: proto});
+})();
 </script>

@@ -1,0 +1,33 @@
+<script>
+    (function() {
+        window.EOF = function(conf) {
+            let thisDoc = document.currentScript.ownerDocument;
+            let proto = Object.create(HTMLElement.prototype, {
+                createdCallback: {
+                    value: function() {
+                        let tpl = thisDoc.querySelector(`template[is="${conf.is}"]`);
+                        let clone = document.importNode(tpl.content, true);
+                        this.createShadowRoot().appendChild(clone);
+                    }
+                }        
+            });
+
+            document.registerElement(conf.is, {prototype: proto});
+            EOF.telemetry._registrate(conf.is);
+        };
+
+        EOF.version = '0.0.1';
+        EOF.telemetry = {
+            registions: [],
+            _registrate: function(elm) {
+                this.registions.push(elm);
+            },
+            _regLog: function(elm) {
+                 console.log(`<${elm}> registered`);        
+            },
+            dumpRegistrations: function() {
+                this.registions.forEach(this._regLog);        
+            }
+        };
+    })();
+</script>
