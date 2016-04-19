@@ -1,27 +1,11 @@
 <template is="cate-button">
     <style>
-        :host {
-            --btn-color: green;
-        }
-
-        :host-context(.red) {
-            --btn-color: red;
-        }
-
-        .btn {
-            display: inline-block;
-            width: 136px;
-            height: 46px;
-            line-height: 46px;
-            border: 1px solid black;
-            text-align: center;
-            color: var(--btn-color);
-        }
     </style>
-    <div class="btn" >
+    
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
         <content></content>
-    </div>
-    xxx
+    </button>
+    
 </template>
 
 <script>

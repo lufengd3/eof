@@ -1,0 +1,39 @@
+<template is="teacher-wishes">
+    <style>
+        .wishes {
+            font-size: 12px;
+            color: #248;
+            background: url(assets/imgs/wishes.png) no-repeat;
+            height: 145px;
+        }
+        
+        a {
+            text-decoration: none;
+            float: right;
+            display: inline-block;
+            padding: 40px 20px;
+            width: 140px;
+        }
+        
+        a:hover {
+            color: #f60;
+        }
+    </style>
+
+    <!--<img src="assets/imgs/wishes.png" alt="">
+    <img src="assets/imgs/wishes-background.png" alt="">-->
+    <div class="wishes">
+        <a href="#">
+            50余年历史的积淀铸就了光电信息学院今日的辉煌，在学校的关心和支持下，在几代光电...
+        </a>    
+    </div>
+    
+</template>
+
+<script>
+(function() {
+    EOF({
+        is: 'teacher-wishes'
+    });
+})();
+</script>

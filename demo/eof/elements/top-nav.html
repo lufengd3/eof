@@ -1,0 +1,51 @@
+<template is="top-nav">
+    <style>
+        ul {
+            display: flex;
+            justify-content: space-between;
+            list-style: none;  
+            margin: 0;
+            padding: 0 30px;
+            background-color: #6984B3;
+        }
+        
+        li {
+            padding: 10px 0;    
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        li:hover {
+            background-color: white;
+        }
+        
+        li:hover a {
+            color: black;
+        }
+        
+        a {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+
+    <ul>
+        <li><a href="#">学院首页</a></li>
+        <li><a href="#">学院介绍</a></li>
+        <li><a href="#">新闻公告</a></li>
+        <li><a href="#">科学研究</a></li>
+        <li><a href="#">本科生教学</a></li>
+        <li><a href="#">研究生教学</a></li>
+        <li><a href="#">学生工作</a></li>
+        <li><a href="#">常用下载</a></li>
+        <li><a href="#">办公指南</a></li>
+    </ul>
+</template>
+
+<script>
+(function() {
+    EOF({
+        is: 'top-nav'
+    });
+})();
+</script>

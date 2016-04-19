@@ -1,0 +1,42 @@
+<link rel="import" href="img-slider.html">
+
+<template is="main-news">
+    <style>
+        :host {
+            width: 100%;
+        }
+        .head {
+            height: 30px;
+            background-color: #6984B3;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 10px 8px;
+            margin-bottom: 3px;
+            color: white;
+        }
+        .more {
+            font-size: 12px;
+        }
+    </style>
+
+    <div class="head">
+        <span class="title">学院新闻</span>
+        <span class="more">更多...</span>
+    </div>
+    
+    <img-slider style="width: 280px; height: 210px;">
+        <img src="assets/imgs/newstest.png" style="width: 100%; height: 100%;" />
+    </img-slider>
+    
+    
+    
+</template>
+
+<script>
+(function() {
+    EOF({
+        is: 'main-news'
+    });
+})();
+</script>

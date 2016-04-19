@@ -3,17 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>光电信息学院</title>
+    <link rel="stylesheet" href="assets/libs/normalize.css">
+    <link rel="stylesheet" href="assets/libs/material.min.css">
+    <link rel="stylesheet" href="assets/css/font.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <script src="assets/libs/material.min.js"></script>
     <link rel="import" href="../../src/EOF.html">
-    <link rel="import" href="elements/cate-button.html">
-    <link rel="import" href="elements/site-logo.html">
-
+    <link rel="import" href="elements/img-slider.html">
+    <link rel="import" href="elements/site-header.html">
+    <link rel="import" href="elements/main-news.html">
+    <link rel="import" href="elements/site-sidebar.html">
+    
     <style>
+        .zkx {
+            color: red;
+        }        
     </style>
 </head>
-<body class="red">
+<body>
 
-    <site-logo></site-logo>
-    <cate-button>教学成果</cate-button>
+    <site-header></site-header>
+    <img-slider style="width: 100%; height: 169px;">
+        <img src="assets/imgs/banner_2.jpg" style="width: 100%; height: 100%;" />
+    </img-slider>
+    
+    <div class="main">
+        <div class="sidebar">
+            <site-sidebar></site-sidebar>
+        </div>
+        
+        <div class="news-board">
+            <main-news></main-news>
+        </div>
+    </div>
 
 </body>
 </html>
