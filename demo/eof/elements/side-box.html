@@ -1,0 +1,35 @@
+<template is="side-box">
+    <style>
+        ：host {
+            display: block;
+            margin-top: 16px;
+        }
+        .header {
+            width: 100%;
+            color: #2F62BB;
+            background-color: #EFEFEF;
+            text-indent: 10px;
+        }
+        .select-box {
+            text-align: center;
+            margin: 10px;
+        }
+        select {
+            width: 85%;
+            padding-left: 27%;
+        }
+    </style>
+
+    <div>
+        <div class="header">友情链接</div>
+        <content></content>
+    </div>
+</template>
+
+<script>
+(function() {
+    EOF({
+        is: 'side-box'
+    });
+})();
+</script>

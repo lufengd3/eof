@@ -1,8 +1,28 @@
 <template is="cate-button">
     <style>
+        button {
+            display: inline-block;
+            width: var(--cate-button-width, 800px);
+            height: var(--cate-button-height, 50px);
+            background-color: #EEE;
+            border-radius: 3px;
+            border: none;
+            font-size: 16px;
+            color: #2F62BB;
+        }
+        button:focus {
+            outline: none;
+        }
+        button:hover {
+            cursor: pointer;
+        }
+        button:active {
+            transition: background-color 0.7s ease;
+            background-color: #6984B3;
+        }
     </style>
     
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+    <button>
         <content></content>
     </button>
     

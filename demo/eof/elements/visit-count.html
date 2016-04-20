@@ -1,0 +1,24 @@
+<template is="visit-count">
+    <style>
+        p {
+            font-size: 14px;
+            text-indent: 25px;
+        }
+        span {
+            color: #2F62BB;
+        }
+    </style>
+
+    <div>
+        <p>今日访问：<span>452</span></p>
+        <p>历史访问：<span>3443455342</span></p>
+    </div>
+</template>
+
+<script>
+(function() {
+    EOF({
+        is: 'visit-count'
+    });
+})();
+</script>
