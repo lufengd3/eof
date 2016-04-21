@@ -1,0 +1,23 @@
+<link rel="import" href="news-box.html">
+
+<template is="news-cates">
+    <style>
+        :host {
+            /*display: flex;*/
+        }
+        news-box {
+        }
+    </style>
+
+    <news-box></news-box>
+    <news-box></news-box>
+    <news-box></news-box>
+</template>
+
+<script>
+(function() {
+    EOF({
+        is: 'news-cates'
+    });
+})();
+</script>

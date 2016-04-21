@@ -1,0 +1,36 @@
+<template is="news-item">
+    <style>
+        li {
+            border-bottom: 1px dotted #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            line-height: 26px;
+        }
+        a {
+            color: #248;
+            text-decoration: none;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        span {
+            font-size: 12px;
+            min-width: 56px;
+            margin-left: 3px;
+        }
+    </style>
+
+    <li>
+        <a href="#">2012级：大面积课程重新学习考sdsdsdfddsdstfdsgfdgsdfgsdfgfdgsdgdgfdgdfgfdgfdsgsfdgsfdgsfsdfds试工作的</a>
+        <span>2016-04-15</span>
+    </li>
+</template>
+
+<script>
+(function() {
+    EOF({
+        is: 'news-item'
+    });
+})();
+</script>

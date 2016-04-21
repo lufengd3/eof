@@ -1,4 +1,5 @@
 <link rel="import" href="img-slider.html">
+<link rel="import" href="main-news-list.html">
 
 <template is="main-news">
     <style>
@@ -22,6 +23,15 @@
         .more {
             font-size: 12px;
         }
+        .content {
+            display: flex;
+            justify-content: space-between;
+        }
+        main-news-list {
+            margin-left: 8px;
+            flex-grow: 1;
+            width: 0;
+        }
     </style>
 
     <div class="head">
@@ -29,11 +39,13 @@
         <span class="more">更多...</span>
     </div>
     
-    <img-slider>
-        <img src="assets/imgs/newstest.png" />
-    </img-slider>
-    
-    
+    <div class="content">
+        <img-slider>
+            <img src="assets/imgs/newstest.png" />
+        </img-slider>
+        
+        <main-news-list></main-news-list>
+    </div>
     
 </template>
 

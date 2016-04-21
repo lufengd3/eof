@@ -1,0 +1,25 @@
+<link rel="import" href="news-item.html">
+
+<template is="main-news-list">
+    <style>
+        h4 {
+            background-color: #EEE;
+            margin: 0;
+            line-height: 27px;
+        }
+    </style>
+
+    <div>
+        <h4>新闻列表</h4>
+        <news-item></news-item>
+        <news-item></news-item>
+    </div>
+</template>
+
+<script>
+(function() {
+    EOF({
+        is: 'main-news-list'
+    });
+})();
+</script>

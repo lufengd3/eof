@@ -8,7 +8,6 @@ body {
 .main {
     margin: 15px 0;
     display: flex;
-    justify-content: row; 
 }
 
 .sidebar {
