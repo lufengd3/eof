@@ -1,11 +1,8 @@
 <link rel="import" href="img-slider.html">
 <link rel="import" href="main-news-list.html">
 
-<template is="main-news">
+<template id="main-news">
     <style>
-        :host {
-            width: 100%;
-        }
         img-slider {
             width: 280px;
             height: 210px;
@@ -25,12 +22,10 @@
         }
         .content {
             display: flex;
-            justify-content: space-between;
         }
         main-news-list {
             margin-left: 8px;
-            flex-grow: 1;
-            width: 0;
+            width: calc(100% - 280px);
         }
     </style>
 
@@ -51,7 +46,7 @@
 
 <script>
 (function() {
-    EOF({
+    EOF.register({
         is: 'main-news'
     });
 })();

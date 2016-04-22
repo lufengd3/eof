@@ -1,11 +1,15 @@
 <link rel="import" href="news-box.html">
 
-<template is="news-cates">
+<template id="news-cates">
     <style>
         :host {
-            /*display: flex;*/
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 10px 3px;
         }
         news-box {
+            width: 48%;
         }
     </style>
 
@@ -16,7 +20,7 @@
 
 <script>
 (function() {
-    EOF({
+    EOF.register({
         is: 'news-cates'
     });
 })();

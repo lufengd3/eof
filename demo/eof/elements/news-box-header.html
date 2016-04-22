@@ -1,19 +1,48 @@
-<template is="news-box-header">
+<template id="news-box-header">
     <style>
         :host {
-            /*display: flex;*/
-            /*justify-content: space-between;*/
-            border-bottom: 2px solid #DDD;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solis #DDD;
+            --cate-color: gray;
+            align-items: center;
+        }
+        .more {
+            font-size: 12px;
+            width: 42px;
+            background-color: var(--cate-color);
+            color: white;
+            text-align: center;
+            height: 17px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .icon {
+            display: inline-block;
+            width: 3px;
+            height: 13px;
+            background-color: var(--cate-color);
+        }
+        .pinyin {
+            margin-left: 15px;
+        }
+        div {
+            font-size: 18px;
+            color: var(--cate-color);
         }
     </style>
 
-    <span class="title">教务科</span>
-    <span class="more">更多...</span>
+    <div>
+        <span class="icon"></span>
+        <span class="title">教务科</span>
+        <span class="pinyin">JIAOWUKE</span>
+    </div>
+    <a href="#" class="more">更多...</a>
 </template>
 
 <script>
 (function() {
-    EOF({
+    EOF.register({
         is: 'news-box-header'
     });
 })();

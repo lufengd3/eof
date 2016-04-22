@@ -1,4 +1,4 @@
-<template is="news-item">
+<template id="news-item">
     <style>
         li {
             border-bottom: 1px dotted #eaeaea;
@@ -13,24 +13,33 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            text-indent: 5px;
         }
         span {
-            font-size: 12px;
-            min-width: 56px;
+            font-size: var(--small-font-size);
+            min-width: 70px;
             margin-left: 3px;
+            text-align: right;
+            color: #555;
         }
     </style>
 
     <li>
-        <a href="#">2012级：大面积课程重新学习考sdsdsdfddsdstfdsgfdgsdfgsdfgfdgsdgdgfdgdfgfdgfdsgsfdgsfdgsfsdfds试工作的</a>
+        <a href="#">{{ newscontent }}</a>
         <span>2016-04-15</span>
     </li>
 </template>
 
 <script>
 (function() {
-    EOF({
-        is: 'news-item'
+    EOF.register({
+        is: 'news-item',
+        data: {
+            newscontent: {
+                type: 'String', 
+                value: '123'
+            }
+        }
     });
 })();
 </script>

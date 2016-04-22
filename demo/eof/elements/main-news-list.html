@@ -1,12 +1,14 @@
 <link rel="import" href="news-item.html">
 
-<template is="main-news-list">
+<template id="main-news-list">
     <style>
         h4 {
             background-color: #EEE;
             margin: 0;
             line-height: 27px;
+            text-indent: 5px;
         }
+        
     </style>
 
     <div>
@@ -18,7 +20,7 @@
 
 <script>
 (function() {
-    EOF({
+    EOF.register({
         is: 'main-news-list'
     });
 })();

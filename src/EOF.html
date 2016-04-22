@@ -1,33 +1,49 @@
 <script>
     (function() {
-        window.EOF = function(conf) {
-            let thisDoc = document.currentScript.ownerDocument;
-            let proto = Object.create(HTMLElement.prototype, {
-                createdCallback: {
-                    value: function() {
-                        let tpl = thisDoc.querySelector(`template[is="${conf.is}"]`);
-                        let clone = document.importNode(tpl.content, true);
-                        this.createShadowRoot().appendChild(clone);
-                    }
-                }        
-            });
+         window.EOF = {
+            version: '0.0.1',
 
-            document.registerElement(conf.is, {prototype: proto});
-            EOF.telemetry._registrate(conf.is);
-        };
+            register: function(conf) {
+                let self = this;
+                let thisDoc = document.currentScript.ownerDocument;
+                let tpl = thisDoc.querySelector(`#${conf.is}`);
+                
+                if (!tpl) {
+                    throw new Error(`Can't find template Node: ${conf.is}`);
+                    return;
+                }
+                
+                let proto = Object.create(HTMLElement.prototype, {
+                    createdCallback: {
+                        value: function() {
+                            let tplContent = self._parseTpl(tpl, conf.data);
+                            let clone = document.importNode(tplContent, true);
+                            
+                            this.createShadowRoot().appendChild(clone);
+                        }
+                    }        
+                });
 
-        EOF.version = '0.0.1';
-        EOF.telemetry = {
-            registions: [],
-            _registrate: function(elm) {
-                this.registions.push(elm);
+                document.registerElement(conf.is, {prototype: proto});
+                self.telemetry._registrate(conf.is);
             },
-            _regLog: function(elm) {
-                 console.log(`<${elm}> registered`);        
+
+            telemetry: {
+                registions: [],
+                _registrate: function(elm) {
+                    this.registions.push(elm);
+                },
+                _regLog: function(elm) {
+                     console.log(`<${elm}> registered`);        
+                },
+                dumpRegistrations: function() {
+                    this.registions.forEach(this._regLog);        
+                }
             },
-            dumpRegistrations: function() {
-                this.registions.forEach(this._regLog);        
+            
+            _parseTpl: function(tpl, data) {
+                return tpl.content;
             }
-        };
+        }
     })();
 </script>
