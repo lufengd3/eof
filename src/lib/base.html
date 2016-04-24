@@ -1,0 +1,71 @@
+<script>
+    (function() {
+         window.EOF = {
+            version: '0.0.1',
+
+            register: function(conf) {
+                let self = this;
+                let thisDoc = document.currentScript.ownerDocument;
+                let tpl = thisDoc.querySelector(`#${conf.is}`);
+                
+                if (!tpl) {
+                    throw new Error(`Can't find template Node: ${conf.is}`);
+                    return;
+                }
+                
+                let proto = Object.create(HTMLElement.prototype, {
+                    createdCallback: {
+                        value: function() {
+                            let tplContent = self._parseTpl(this, tpl, conf.data);
+                            let clone = document.importNode(tplContent, true);
+                            
+                            this.createShadowRoot().appendChild(clone);
+                        }
+                    }        
+                });
+
+                document.registerElement(conf.is, {prototype: proto});
+                self.telemetry._registrate(conf.is);
+            },
+
+            telemetry: {
+                registions: [],
+                _registrate: function(elm) {
+                    this.registions.push(elm);
+                },
+                _regLog: function(elm) {
+                     console.log(`<${elm}> registered`);        
+                },
+                dumpRegistrations: function() {
+                    this.registions.forEach(this._regLog);        
+                }
+            },
+            
+            _parseTpl: function(elm, tpl, data) {
+                let self = this;
+                
+                if (!data) {
+                    return tpl.content;
+                }
+                
+                let tplCopy = tpl.cloneNode(true);
+                let tplStr = tplCopy.innerHTML;
+                
+                for (key in data) {
+                    let obj = data[key];
+                    let slashType = self.utils.camel2slash(key);
+                    //  data.value 可能在elements标签属性上
+                    let value = elm.getAttribute(slashType) || data.value || '';
+                    
+                    let searchStr = `{{\\s${key}\\s}}`;
+                    tplStr = self.utils.replaceAll(tplStr, [searchStr], obj.type(value));
+                    
+                }
+                
+                tplCopy.innerHTML = tplStr;
+                
+                return tplCopy.content;
+            }
+        }
+    })();
+</script>

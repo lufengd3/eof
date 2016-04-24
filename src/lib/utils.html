@@ -1,0 +1,16 @@
+<script>
+    (function() {
+        EOF.utils = {
+            replaceAll: function(str, search = [' '], replacement = '') {
+                let pattern = new RegExp(search.join('|'), 'g');
+                
+                return str.replace(pattern, replacement);
+            },
+            camel2slash: function(str) {
+                let pattern = new RegExp('([A-Z])', 'g');
+                
+                return str.replace(pattern, '-$1').toLowerCase();
+            }
+        }        
+    })();
+</script>

@@ -25,8 +25,8 @@
     </style>
 
     <li>
-        <a href="#">{{ newscontent }}</a>
-        <span>2016-04-15</span>
+        <a href="#">{{ newsTitle }}</a>
+        <span>{{ newsTime }}</span>
     </li>
 </template>
 
@@ -35,11 +35,14 @@
     EOF.register({
         is: 'news-item',
         data: {
-            newscontent: {
-                type: 'String', 
-                value: '123'
+            newsTitle: {
+                type: String 
+            },
+            newsTime: {
+                type: String
             }
         }
+        
     });
 })();
 </script>
