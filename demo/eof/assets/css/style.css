@@ -6,6 +6,8 @@ body {
     border: 1px solid #eee;
     padding: 1px;
     --small-font-size: 12px;
+    --theme-color: #6984B3;
+    --theme-font-color: #2F62BB;
 }
 
 .main {

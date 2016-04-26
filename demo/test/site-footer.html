@@ -1,0 +1,40 @@
+<template id="site-footer">
+    <style>
+        div {
+            border-top: 1px solis #ddd;
+            color: #333;
+            line-height: 48px;
+            text-align: center;
+            font-size: var(--small-font-size);
+        }
+    </style>
+
+    <div>
+        Copyright © 2010 电子科技大学光电信息学院 版权所有&nbsp;&nbsp;&nbsp;&nbsp;技术支持:地平线工作室
+    </div>
+</template>
+
+<script>
+let self = this;
+let thisDoc = document.currentScript.ownerDocument;
+console.log(thisDoc);
+let tpl = thisDoc.querySelector(`#site-footer`);
+
+let proto = Object.create(HTMLElement.prototype, {
+    createdCallback: {
+        value: function() {
+            let tplContent = tpl.content;
+            let clone = document.importNode(tplContent, true);
+            
+            this.createShadowRoot().appendChild(clone);
+        }
+    }        
+});
+
+document.registerElement('site-footer', {prototype: proto});
+
+
+
+(function() {
+})();
+</script>

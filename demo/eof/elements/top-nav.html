@@ -1,51 +1,263 @@
 <template id="top-nav">
     <style>
-        ul {
+        .nav {
             display: flex;
             justify-content: space-between;
-            list-style: none;  
             margin: 0;
             padding: 0 30px;
-            background-color: #6984B3;
+            background-color: var(--theme-color);
+            height: 36px;
+            line-height: 36px;
         }
         
-        li {
-            padding: 10px 0;    
+        .nav-item {
             flex-grow: 1;
             text-align: center;
         }
         
-        li:hover {
+        .nav-item:hover {
             background-color: white;
         }
         
-        li:hover a {
-            color: black;
+        .nav-item:hover .nav-link {
+            color: var(--theme-color);
         }
         
+        .nav-link {
+            color: white;
+        }
+        .sub-nav {
+            position: relative;
+            display: none;
+            padding: 0;
+            background-color: #eee;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+        .sub-nav li {
+            height: 28px;
+            line-height: 28px;
+        }
+        .sub-nav a {
+            color: var(--theme-font-color);
+        }
+        .sub-nav li:hover {
+            background-color: #ccc;
+        }
+        ul {
+            list-style: none;
+        }
         a {
             text-decoration: none;
             color: white;
         }
     </style>
 
-    <ul>
-        <li><a href="#">学院首页</a></li>
-        <li><a href="#">学院介绍</a></li>
-        <li><a href="#">新闻公告</a></li>
-        <li><a href="#">科学研究</a></li>
-        <li><a href="#">本科生教学</a></li>
-        <li><a href="#">研究生教学</a></li>
-        <li><a href="#">学生工作</a></li>
-        <li><a href="#">常用下载</a></li>
-        <li><a href="#">办公指南</a></li>
+    <ul class="nav" ekey="nav">
+        <li class="nav-item">
+            <a href="#" class="nav-link">学院首页</a>
+        </li>
+        <li class="nav-item" class="nav-item">
+            <a href="#" class="nav-link">学院介绍</a>
+            <ul class="sub-nav" class="sub-nav">
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">院长致辞</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学院概况</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">历史沿革</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学院机构</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学院领导</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">师资队伍</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学科建设</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">新闻公告</a>
+            <ul class="sub-nav" class="sub-nav">
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学院新闻</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学院办</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">教务科</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学生科</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">研管科</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">国际交流</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">科研科</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">继教办</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">科学研究</a>
+            <ul class="sub-nav" class="sub-nav">
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">科研概况</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">科研机构</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">科研方向</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">获奖情况</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">本科生教学</a>
+            <ul class="sub-nav" class="sub-nav">
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">教学概述</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">专业设置</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">课程建设</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">实验基地</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">教学成果</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">研究生教学</a>
+            <ul class="sub-nav" class="sub-nav">
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">专业设置</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">教学管理</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学位工作</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">研究生招生</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">学生工作</a>
+            <ul class="sub-nav" class="sub-nav">
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学生刊物</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学生活动</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">问题咨询</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">网站调查</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">常用下载</a>
+            <ul class="sub-nav" class="sub-nav">
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学院新闻</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学院办</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">学生科</a>
+                </li>
+                <li class="sub-nav-item" >
+                    <a href="" class="sub-nav-link">科研科</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">办公指南</a>
+        </li>
     </ul>
 </template>
 
 <script>
 (function() {
+    function getSubNav(node) {
+        let elm = null;
+        switch (node.className) {
+            case 'nav-link':
+                elm = node.parentNode.querySelector('.sub-nav');
+                break;
+            case 'nav-item':
+                elm = node.querySelector('.sub-nav');
+                break;        
+            case 'sub-nav':
+                elm = node;
+                break;
+            case 'sub-nav-item':
+                elm = node.parentNode;
+                break;
+            case 'sub-nav-link':
+                elm = node.parentNode.parentNode;
+                break;
+            default: break;
+        }
+        
+        return elm;
+    }
+    
+    function showSubMenu(e) {
+        let elm = getSubNav(e.target);
+        
+        if (elm) {
+            elm.style.display = 'inherit';
+        }
+    }
+    
+    function hideSubMenu(e) {
+        let elm = getSubNav(e.target);
+        
+        if (elm) {
+            elm.style.display = 'none';
+        }
+    }
+    
     EOF.register({
-        is: 'top-nav'
+        is: 'top-nav',
+        // 绑定事件的元素需要设置 ekey
+        events: {
+            nav: [{
+                mouseover: showSubMenu
+            }, {
+                mouseout: hideSubMenu
+            }]
+        }
     });
 })();
 </script>

@@ -18,8 +18,10 @@
                         value: function() {
                             let tplContent = self._parseTpl(this, tpl, conf.data);
                             let clone = document.importNode(tplContent, true);
+                            let shadowRoot = this.createShadowRoot();
                             
-                            this.createShadowRoot().appendChild(clone);
+                            shadowRoot.appendChild(clone);
+                            self.events.init(shadowRoot, conf.events);
                         }
                     }        
                 });
@@ -41,6 +43,12 @@
                 }
             },
             
+            /**
+             * @param elm, 实例化的标签
+             * @param tpl,  template DOM
+             * @param data, properties data
+             * @return template content DOM
+             */
             _parseTpl: function(elm, tpl, data) {
                 let self = this;
                 
