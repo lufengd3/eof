@@ -6,15 +6,20 @@
     </style>
 
     <div>
-        <news-box-header></news-box-header>
-        <news-item news="fuffds"></news-item>
+        <news-box-header news-cate="{{ newsCateData.newsCate }}"></news-box-header>
+        <news-item news="{{ newsCateData.news }}"></news-item>
     </div>
 </template>
 
 <script>
 (function() {
     EOF.register({
-        is: 'news-box'
+        is: 'news-box',
+        data: {
+            newsCateData: {
+                type: 'object'
+            }
+        }
     });
 })();
 </script>

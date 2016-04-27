@@ -18,15 +18,15 @@
         span {
             font-size: var(--small-font-size);
             min-width: 70px;
-            margin-left: 3px;
+            margin: 0 3px;
             text-align: right;
             color: #555;
         }
     </style>
 
     <li>
-        <a href="#">{{ newsTitle }}</a>
-        <span>{{ newsTime }}</span>
+        <a href="#">{{ news.title }}</a>
+        <span>{{ news.time }}</span>
     </li>
 </template>
 
@@ -35,11 +35,8 @@
     EOF.register({
         is: 'news-item',
         data: {
-            newsTitle: {
-                type: String 
-            },
-            newsTime: {
-                type: String
+            news: {
+                type: "object"
             }
         }
         

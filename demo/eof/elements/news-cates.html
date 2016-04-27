@@ -13,15 +13,34 @@
         }
     </style>
 
-    <news-box></news-box>
-    <news-box></news-box>
-    <news-box></news-box>
+    <!--<div name=repeat edata -->
+    <news-box news-cate-data="{{ newsCateData }}"></news-box>
+    <!--<news-box news-cate="学院办"></news-box>
+    <news-box news-cate="教务科"></news-box>
+    <news-box news-cate="学生科"></news-box>
+    <news-box news-cate="研管科"></news-box>
+    <news-box news-cate="科研科"></news-box>
+    <news-box news-cate="组织人事科"></news-box>-->
+    <!--</div>-->
 </template>
 
 <script>
 (function() {
     EOF.register({
-        is: 'news-cates'
+        is: 'news-cates',
+        data: {
+            // news: {
+            //     type: Array,
+            //     value: [{}, {}, {}]
+            // }
+            newsCateData: {
+                type: "object",
+                value: {
+                    newsCate: "学院办", 
+                    news: {"title": "Hello world", "time": "2016-09-02"}
+                }
+            }
+        }
     });
 })();
 </script>

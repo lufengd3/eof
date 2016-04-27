@@ -3,7 +3,7 @@
         :host {
             display: flex;
             justify-content: space-between;
-            border-bottom: 2px solis #DDD;
+            border-bottom: 2px solid #DDD;
             --cate-color: gray;
             align-items: center;
         }
@@ -34,7 +34,7 @@
 
     <div>
         <span class="icon"></span>
-        <span class="title">教务科</span>
+        <span class="title">{{ newsCate }}</span>
         <span class="pinyin">JIAOWUKE</span>
     </div>
     <a href="#" class="more">更多...</a>
@@ -43,7 +43,12 @@
 <script>
 (function() {
     EOF.register({
-        is: 'news-box-header'
+        is: 'news-box-header',
+        data: {
+            newsCate: {
+                type: String
+            }
+        }
     });
 })();
 </script>

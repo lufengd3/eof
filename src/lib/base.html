@@ -56,6 +56,8 @@
                     return tpl.content;
                 }
                 
+                // dom repeat
+                
                 let tplCopy = tpl.cloneNode(true);
                 let tplStr = tplCopy.innerHTML;
                 
@@ -63,10 +65,29 @@
                     let obj = data[key];
                     let slashType = self.utils.camel2slash(key);
                     //  data.value 可能在elements标签属性上
-                    let value = elm.getAttribute(slashType) || data.value || '';
+                    let value = elm.getAttribute(slashType) || obj.value || '';
+                    
+                    if (obj.type === "object") {
+                        if (typeof value === "string") {
+                            console.log(elm)
+                            console.log(value)
+                            value = JSON.parse(decodeURIComponent(value));
+                            let keys = Object.keys(value);
+                            for (let i = keys.length; i--; ) {
+                                let searchStr = `{{\\s${key}.${keys[i]}\\s}}`;
+                                if (typeof value[keys[i]] !== "string") {
+                                    value[keys[i]] = encodeURIComponent(JSON.stringify(value[keys[i]]));    
+                                }
+                                tplStr = self.utils.replaceAll(tplStr, [searchStr], value[keys[i]]);        
+                            }    
+                        }
+                        
+                        value = encodeURIComponent(JSON.stringify(value));
+                    }                    
                     
                     let searchStr = `{{\\s${key}\\s}}`;
-                    tplStr = self.utils.replaceAll(tplStr, [searchStr], obj.type(value));
+                    
+                    tplStr = self.utils.replaceAll(tplStr, [searchStr], value);
                     
                 }
                 
