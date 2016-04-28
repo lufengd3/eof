@@ -55,11 +55,19 @@
                 if (!data) {
                     return tpl.content;
                 }
-                
-                // dom repeat
-                
+
                 let tplCopy = tpl.cloneNode(true);
                 let tplStr = tplCopy.innerHTML;
+                
+                /**
+                 * dom-repeat and dom-if render 
+                 * TODO: dom-if
+                 */
+                
+                // TODO: regex match !
+                if (tplStr.indexOf('<template repeat') !== -1) {
+                    tplStr = self._domRepeat(elm, tplStr, data)
+                }
                 
                 for (key in data) {
                     let obj = data[key];
@@ -67,14 +75,15 @@
                     //  data.value 可能在elements标签属性上
                     let value = elm.getAttribute(slashType) || obj.value || '';
                     
-                    if (obj.type === "object") {
+                    if (obj.type === "object" || obj.type === 'array') {
+                        
                         if (typeof value === "string") {
-                            console.log(elm)
-                            console.log(value)
                             value = JSON.parse(decodeURIComponent(value));
                             let keys = Object.keys(value);
                             for (let i = keys.length; i--; ) {
-                                let searchStr = `{{\\s${key}.${keys[i]}\\s}}`;
+                                
+                                let searchStr = `{{\\s*${key}.${keys[i]}\\s*}}`;
+                                
                                 if (typeof value[keys[i]] !== "string") {
                                     value[keys[i]] = encodeURIComponent(JSON.stringify(value[keys[i]]));    
                                 }
@@ -85,7 +94,7 @@
                         value = encodeURIComponent(JSON.stringify(value));
                     }                    
                     
-                    let searchStr = `{{\\s${key}\\s}}`;
+                    let searchStr = `{{\\s*${key}\\s*}}`;
                     
                     tplStr = self.utils.replaceAll(tplStr, [searchStr], value);
                     
@@ -94,7 +103,59 @@
                 tplCopy.innerHTML = tplStr;
                 
                 return tplCopy.content;
+            },
+            
+            /**
+             * @return String; innerHTML
+             * TODO: <template repeat="{{ a.b.c }}"
+             */
+            _domRepeat: function(elm, htmlStr, data) {
+                let self = this;
+                // 不能用创建shadow dom的方式查找替换，tpl中有{{*}}的变量形式，引起解析错误
+                
+                // TODO: match all <template></template>
+                // modify regexp   要匹配所有变量名所包含字符!!!
+                let pattern = /<template\s*\w*="{{\s*(\w*\.?\w*)\s*}}"\s*>(.*)<\/template>/;
+                window.tplStr = self.utils.replaceAll(htmlStr, ['\n']);
+                let matched = tplStr.match(pattern);
+                let key = matched[1];
+                let repeatDom = matched[2];
+                let replaceMent = '';
+                let repeatArr = '';
+
+                
+                if (key.indexOf('.') >= 0) {
+                    let key1 = key.split('.')[0];
+                    let key2 = key.split('.')[1];
+                    let slashType = self.utils.camel2slash(key1);
+                    let attrValue = elm.getAttribute(slashType);
+                    let obj = JSON.parse(decodeURIComponent(attrValue));
+                    repeatArr = obj[key2];
+                    
+                } else {
+                    repeatArr = data[key]['value'];
+                }
+                
+                if (!repeatArr) {
+                   return htmlStr;
+                }
+                
+                for (let i = repeatArr.length; i--; ) {
+
+                    if (typeof repeatArr[i] === 'object') {
+                        repeatArr[i] = encodeURIComponent(JSON.stringify(repeatArr[i]));
+                    }
+
+                    let searchStr =  '{{\\s*eItem\\s*}}';
+                    
+                    replaceMent += self.utils.replaceAll(repeatDom, [searchStr], repeatArr[i]);
+                }
+                    
+                htmlStr = tplStr.replace(pattern, replaceMent);
+                    
+                return htmlStr;
             }
         }
     })();
 </script>
+ 

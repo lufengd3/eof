@@ -7,7 +7,9 @@
 
     <div>
         <news-box-header news-cate="{{ newsCateData.newsCate }}"></news-box-header>
-        <news-item news="{{ newsCateData.news }}"></news-item>
+        <template repeat="{{ newsCateData.news }}">
+            <news-item news="{{ eItem }}"></news-item>
+        </template>
     </div>
 </template>
 

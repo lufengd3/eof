@@ -13,8 +13,9 @@
 
     <div>
         <h4>新闻列表</h4>
-        <news-item news='{{ schoolNews }}'></news-item>
-        <!--<news-item news-title="thisfdkjsdf is  a  test" news-time="2016-09-02"}'></news-item>-->
+        <template repeat="{{ schoolNews }}">
+            <news-item news='{{ eItem }}'></news-item>
+        </template>
     </div>
 </template>
 
@@ -24,8 +25,29 @@
         is: 'main-news-list',
         data: {
             schoolNews: {
-                type: "object",
-                value: {"title": "Hello world", "time": "2016-09-02"}
+                type: "array",
+                value: [{
+                    "title": "刘志军教授：自主思考，做自己喜欢的东西", 
+                    "time": "2016-09-02"
+                }, {
+                    "title": "喜报--我院学子在2016年美国大学生数学建模竞赛中获得佳绩", 
+                    "time": "2016-09-02"
+                }, {
+                    "title": "喜报--我院在电子科技大学2015-2016年度本科生 “先进党支部”创", 
+                    "time": "2016-09-02"
+                }, {
+                    "title": "中科院北京纳米能源与系统研究所的研究员——朱光博士来我院做学...", 
+                    "time": "2016-09-02"
+                }, {
+                    "title": "光电信息学院成功举行2016级研究生乒乓球赛", 
+                    "time": "2016-09-02"
+                }, {
+                    "title": "2016年光电出国么么茶（一）——美国专场", 
+                    "time": "2016-09-02"
+                }, {
+                    "title": "“知行合一，践行研途正能量”系列活动之党史与党章党纪知识竞赛", 
+                    "time": "2016-09-02"
+                }]
             }
         }
     });
