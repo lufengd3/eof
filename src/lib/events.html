@@ -15,6 +15,21 @@
                         } 
                     }
                 }
+            },
+            detach: function(shadowRoot, events = null) {
+                if (events) {
+                    for (key in events) {
+                        let elm = shadowRoot.querySelector(`[ekey=${key}]`);
+                        let elmEvents = events[key];
+                        
+                        for (let i = elmEvents.length; i--; ) {
+                            let eType = Object.keys(elmEvents[i])[0];
+                            let callback = elmEvents[i][eType];
+                            
+                            elm.removeEventListener(eType, callback); 
+                        } 
+                    }
+                }
             }
         }        
     })();

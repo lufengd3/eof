@@ -20,11 +20,7 @@
 </template>
 
 <script>
-(function() {
-    EOF.register({
-        is: 'main-news-list',
-        data: {
-            schoolNews: {
+window.d = {schoolNews: {
                 type: "array",
                 value: [{
                     "title": "刘志军教授：自主思考，做自己喜欢的东西", 
@@ -48,8 +44,11 @@
                     "title": "“知行合一，践行研途正能量”系列活动之党史与党章党纪知识竞赛", 
                     "time": "2016-09-02"
                 }]
-            }
-        }
+            }};
+(function() {
+    EOF.register({
+        is: 'main-news-list',
+        data: d
     });
 })();
 </script>

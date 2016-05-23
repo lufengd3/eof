@@ -55,7 +55,23 @@
                 if (!data) {
                     return tpl.content;
                 }
+                    
+                self._watch(tpl, data);
+                
+                return self._renderTpl(elm, tpl, data);
+            },
+            
+            _watch: function(tpl, data) {
+                Object.observe(data, function(changes){
+                    changes.forEach(function(change) {
+                        console.log(change);
+                    });
+                })
 
+            },
+            
+            _renderTpl: function(elm, tpl, data) {
+                let self = this;
                 let tplCopy = tpl.cloneNode(true);
                 let tplStr = tplCopy.innerHTML;
                 
@@ -102,7 +118,7 @@
                 
                 tplCopy.innerHTML = tplStr;
                 
-                return tplCopy.content;
+                return tplCopy.content;    
             },
             
             /**
