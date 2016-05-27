@@ -56,7 +56,7 @@
                     return tpl.content;
                 }
                     
-                self._watch(tpl, data);
+                // self._watch(tpl, data);
                 
                 return self._renderTpl(elm, tpl, data);
             },
@@ -75,48 +75,95 @@
                 let tplCopy = tpl.cloneNode(true);
                 let tplStr = tplCopy.innerHTML;
                 
+                let d = {
+                    searchStr1: 'hello',
+                    searchStr2: 'world'
+                };
+                
+                if (tplStr.indexOf('searchStr') > -1) {
+                    // TODO '|" , ^(?!=") , except html comment
+                    let attrPattern = /\w*="{{[\s\w]*}}"/g;
+                    let textPattern = /[^"]{{[\s\w]*}}/g;
+                    window.str = tplStr;
+                    attrMatch = tplStr.match(attrPattern);
+                    textMatch = tplStr.match(textPattern);
+                    
+                    /**
+                     * multi element has same attr bind
+                     * remove same item in array
+                     * replace them with same data-bind-key 
+                     */
+                    for (let i = 0; i < attrMatch.length; i++) {
+                        let randKey = String(Math.random()).slice(2);
+                        let bindFlag = `data-bind-key="${randKey}`;
+                        let item = attrMatch[i];
+                        let target = `/${item}/g`;
+                        let variable = item.match(/{{\s*(\w*)\s*}}/)[1];
+                        let replaceMent = item.replace(/{{\s*\w*\s*}}/, `${d[variable]}" ${bindFlag}`);
+                        
+                        str = str.replace(attrMatch[i], replaceMent);
+                    }
+
+                    /**
+                     * text replacement
+                     */
+                    for (let i = 0; i < textMatch.length; i++) {
+                        let randKey = String(Math.random()).slice(2);
+                        let bindFlagStart = `<span data-bind-key="${randKey}">`;
+                        let bindFlagEnd = '</span>';
+                        let item = textMatch[i];
+                        let target = `/${item}/g`;
+                        let variable = item.match(/{{\s*(\w*)\s*}}/)[1];
+                        let replaceMent = item.replace(/{{\s*\w*\s*}}/, `${bindFlagStart}${d[variable]}${bindFlagEnd}`);
+                        
+                        str = str.replace(textMatch[i], replaceMent);
+                    }
+
+                }
+                
+                
                 /**
                  * dom-repeat and dom-if render 
                  * TODO: dom-if
                  */
                 
                 // TODO: regex match !
-                if (tplStr.indexOf('<template repeat') !== -1) {
-                    tplStr = self._domRepeat(elm, tplStr, data)
-                }
+                // if (tplStr.indexOf('<template repeat') !== -1) {
+                //     tplStr = self._domRepeat(elm, tplStr, data)
+                // }
                 
-                for (key in data) {
-                    let obj = data[key];
-                    let slashType = self.utils.camel2slash(key);
-                    //  data.value 可能在elements标签属性上
-                    let value = elm.getAttribute(slashType) || obj.value || '';
+                // for (key in data) {
+                //     let obj = data[key];
+                //     let slashType = self.utils.camel2slash(key);
+                //     //  data.value 可能在elements标签属性上
+                //     let value = elm.getAttribute(slashType) || obj.value || '';
                     
-                    if (obj.type === "object" || obj.type === 'array') {
+                //     if (obj.type === "object" || obj.type === 'array') {
                         
-                        if (typeof value === "string") {
-                            value = JSON.parse(decodeURIComponent(value));
-                            let keys = Object.keys(value);
-                            for (let i = keys.length; i--; ) {
+                //         if (typeof value === "string") {
+                //             value = JSON.parse(decodeURIComponent(value));
+                //             let keys = Object.keys(value);
+                //             for (let i = keys.length; i--; ) {
                                 
-                                let searchStr = `{{\\s*${key}.${keys[i]}\\s*}}`;
+                //                 let searchStr = `{{\\s*${key}.${keys[i]}\\s*}}`;
                                 
-                                if (typeof value[keys[i]] !== "string") {
-                                    value[keys[i]] = encodeURIComponent(JSON.stringify(value[keys[i]]));    
-                                }
-                                tplStr = self.utils.replaceAll(tplStr, [searchStr], value[keys[i]]);        
-                            }    
-                        }
+                //                 if (typeof value[keys[i]] !== "string") {
+                //                     value[keys[i]] = encodeURIComponent(JSON.stringify(value[keys[i]]));    
+                //                 }
+                //                 tplStr = self.utils.replaceAll(tplStr, [searchStr], value[keys[i]]);        
+                //             }    
+                //         }
                         
-                        value = encodeURIComponent(JSON.stringify(value));
-                    }                    
+                //         value = encodeURIComponent(JSON.stringify(value));
+                //     }                    
                     
-                    let searchStr = `{{\\s*${key}\\s*}}`;
+                //     let searchStr = `{{\\s*${key}\\s*}}`;
                     
-                    tplStr = self.utils.replaceAll(tplStr, [searchStr], value);
+                //     tplStr = self.utils.replaceAll(tplStr, [searchStr], value);
                     
-                }
+                // }
                 
-                tplCopy.innerHTML = tplStr;
+                // tplCopy.innerHTML = tplStr;
                 
                 return tplCopy.content;    
             },

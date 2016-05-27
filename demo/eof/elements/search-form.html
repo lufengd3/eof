@@ -6,13 +6,20 @@
         }
     </style>
 
-    <input type="search" placeholder="搜索" />
+    <input type="search" placeholder="搜索" value="{{ searchStr1 }}"/>
+    <input type="search" placeholder="搜索" value="{{ searchStr2 }}"/>
+    <p>搜 {{ searchStr1 }} + {{ searchStr2 }}</p>
 </template>
 
 <script>
 (function() {
     EOF.register({
-        is: 'search-form'
+        is: 'search-form',
+        data: {
+            searchStr: {
+                type: "string"
+            }
+        }
     });
 })();
 </script>
