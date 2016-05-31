@@ -4,6 +4,9 @@
             version: '0.0.1',
 
             register: function(conf) {
+                if (conf.is === 'search-form') {
+                    console.log(this);
+                }
                 let self = this;
                 let thisDoc = document.currentScript.ownerDocument;
                 let tpl = thisDoc.querySelector(`#${conf.is}`);
