@@ -4,9 +4,6 @@
             version: '0.0.1',
 
             register: function(conf) {
-                if (conf.is === 'search-form') {
-                    console.log(this);
-                }
                 let self = this;
                 let thisDoc = document.currentScript.ownerDocument;
                 let tpl = thisDoc.querySelector(`#${conf.is}`);
@@ -87,7 +84,6 @@
                     // TODO '|" , ^(?!=") , except html comment
                     let attrPattern = /\w*="{{[\s\w]*}}"/g;
                     let textPattern = /[^"]{{[\s\w]*}}/g;
-                    window.str = tplStr;
                     attrMatch = tplStr.match(attrPattern);
                     textMatch = tplStr.match(textPattern);
                     
