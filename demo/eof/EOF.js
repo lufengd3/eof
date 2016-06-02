@@ -51,15 +51,19 @@ var EOF =
 	  value: true
 	});
 	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _Parser = __webpack_require__(1);
 	
 	var _Parser2 = _interopRequireDefault(_Parser);
 	
-	var _DataProxy = __webpack_require__(2);
+	var _DataProxy = __webpack_require__(3);
 	
 	var _DataProxy2 = _interopRequireDefault(_DataProxy);
+	
+	var _utils = __webpack_require__(2);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -78,9 +82,8 @@ var EOF =
 	
 	    this._doc = document.currentScript.ownerDocument;
 	    this._tpl = this._doc.querySelector('#' + elmId);
-	    this._data = data;
+	    this.data = data;
 	    this.name = elmId;
-	    this.$; // data proxy
 	    this._dataKey;
 	
 	    this._init();
@@ -91,10 +94,9 @@ var EOF =
 	    value: function _init() {
 	      var self = this;
 	      var tpl = this._tpl;
-	      var tplParser = new _Parser2.default(tpl, this._data);
+	      var tplParser = new _Parser2.default(tpl, this.data);
 	      var result = tplParser.parse();
 	      var tplContent = result.tplContent;
-	      this._data = result.data;
 	      this._dataKey = result.dataKey;
 	
 	      if (!tpl) {
@@ -122,10 +124,32 @@ var EOF =
 	    value: function _setDataProxy(doc) {
 	      var _this = this;
 	
-	      var setHandler = function setHandler(target, key, value) {
-	        console.log('set ' + key + ' = ' + value);
-	        var idList = _this._dataKey[key];
+	      var handleSet = function handleSet(target, key, value, receiver) {
+	        var idList = void 0,
+	            oldDataType = void 0;
+	        var newDataType = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+	
+	        if (_this._dataKey.hasOwnProperty(key)) {
+	          idList = _this._dataKey[key];
+	          oldDataType = _typeof(_this.data[key]);
+	        } else {
+	          for (var k in _this.data) {
+	            if ((0, _utils.isObjEqual)(target, _this.data[k])) {
+	              idList = _this._dataKey[k][key];
+	              oldDataType = _typeof(_this.data[k][key]);
+	            }
+	          }
+	        }
 	        var elms = [];
+	
+	        // if (this.data[key] === value) {
+	        if (0) {
+	          return;
+	        } else if (oldDataType !== newDataType) {
+	          throw new Error('Can\'t change data type from ' + oldDataType + ' to ' + newDataType);
+	        }
+	
+	        console.log('set ' + key);
 	
 	        for (var i = idList.length; i--;) {
 	          var id = idList[i]['id'];
@@ -153,12 +177,20 @@ var EOF =
 	            elm.textContent = value;
 	          }
 	        }
+	
+	        return Reflect.set(target, key, value, receiver);
 	      };
 	
-	      var dataProxy = new _DataProxy2.default(this._data);
+	      var handleDefine = function handleDefine(target, key, value, receiver) {
+	        console.log('define ' + key + ' = ' + value + ', receiver is ' + receiver);
+	      };
 	
-	      dataProxy.handleSet(setHandler);
-	      this.$ = dataProxy.setup();
+	      var dataProxy = new _DataProxy2.default(this.data, {
+	        set: handleSet
+	        // defineProperty: handleDefine     
+	      });
+	
+	      this.data = dataProxy.setup();
 	    }
 	  }]);
 	
@@ -180,7 +212,7 @@ var EOF =
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _utils = __webpack_require__(3);
+	var _utils = __webpack_require__(2);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -190,21 +222,21 @@ var EOF =
 	
 	    this._data = data;
 	    this._tpl = tpl;
+	    this._dataKey = (0, _utils.objTree)();
 	  }
 	
 	  _createClass(parser, [{
 	    key: 'parse',
 	    value: function parse() {
 	      var tplStr = this._tpl.innerHTML;
-	      var data = this._data;
-	      var dataKey = this._getDatakey();
-	
-	      var attrPattern = /\w*="{{[\s\w]*}}"/g;
-	      var textPattern = /[^"]{{[\s\w]*}}/g;
+	      var attrPattern = /\w*="{{[\s\w\.\-]*}}"/g;
+	      var textPattern = /[^"]{{[\s\w\.\-]*}}/g;
 	      var attrMatch = tplStr.match(attrPattern);
 	      var textMatch = tplStr.match(textPattern);
 	      attrMatch = (0, _utils.arrUnique)(attrMatch);
 	      textMatch = (0, _utils.arrUnique)(textMatch);
+	
+	      // replace order cannot change! replace attr first.
 	
 	      /**
 	       * TODO:
@@ -222,12 +254,7 @@ var EOF =
 	          attr: replace.elmAttr
 	        };
 	
-	        if (dataKey.hasOwnProperty(replace.key)) {
-	          dataKey[replace.key].push(dataKeyItem);
-	        } else {
-	          this._data[replace.key] = null;
-	          dataKey[replace.key] = [dataKeyItem];
-	        }
+	        this._setDataKey(replace.key, dataKeyItem);
 	      }
 	
 	      for (var _i = 0; _i < textMatch.length; _i++) {
@@ -240,20 +267,14 @@ var EOF =
 	          attr: null
 	        };
 	
-	        if (dataKey.hasOwnProperty(_replace.key)) {
-	          dataKey[_replace.key].push(_dataKeyItem);
-	        } else {
-	          this._data[_replace.key] = null;
-	          dataKey[_replace.key] = [_dataKeyItem];
-	        }
+	        this._setDataKey(_replace.key, _dataKeyItem);
 	      }
 	
 	      this._tpl.innerHTML = tplStr;
 	
 	      return {
 	        tplContent: this._tpl.content,
-	        dataKey: dataKey,
-	        data: this._data // padding obj
+	        dataKey: (0, _utils.removeObjProxy)(this._dataKey)
 	      };
 	    }
 	
@@ -268,8 +289,10 @@ var EOF =
 	    key: '_replaceVar',
 	    value: function _replaceVar(replaceType, htmlStr, item) {
 	      var randKey = String(Math.random()).slice(2);
-	      var variable = item.match(/{{\s*(\w*)\s*}}/)[1];
-	      var value = this._data[variable] ? this._data[variable] : '';
+	      var variable = item.match(/{{([\s\w\.\-]*)}}/)[1];
+	      variable = variable.trim();
+	
+	      var value = (0, _utils.getValFromExp)(this._data, variable);
 	      var pattern = new RegExp(item, 'g');
 	      var attr = null;
 	      var replaceMent = void 0;
@@ -282,7 +305,7 @@ var EOF =
 	         * so data-bind-key just has singal quotation marks
 	         */
 	        var bindFlag = 'data-bind-id="' + randKey;
-	        replaceMent = item.replace(/{{\s*\w*\s*}}/, value + '" ' + bindFlag);
+	        replaceMent = item.replace(/{{[\s\w\.\-]*}}/, value + '" ' + bindFlag);
 	        attr = item.match(/(\w*)=.*/)[1];
 	      } else {
 	        /**
@@ -304,15 +327,40 @@ var EOF =
 	      };
 	    }
 	  }, {
-	    key: '_getDatakey',
-	    value: function _getDatakey() {
-	      var obj = {};
+	    key: '_setDataKey',
+	    value: function _setDataKey(key, value) {
+	      var val = value; // ???
+	      if (key.indexOf('.') === -1) {
+	        if (this._dataKey.hasOwnProperty(key)) {
+	          this._dataKey[key].push(value);
+	        } else {
+	          this._dataKey[key] = [value];
+	        }
+	      } else {
+	        // console.log(value)   // undefined????
 	
-	      for (var key in this._data) {
-	        obj[key] = [];
+	        var keyArr = key.split('.');
+	        var keyLen = keyArr.length;
+	        var codeStr = 'this._dataKey';
+	        var obj = this._dataKey;
+	        var hasKey = true;
+	        var _value = JSON.stringify(val);
+	
+	        for (var i = 0; i < keyLen; i++) {
+	          codeStr += '["' + keyArr[i] + '"]';
+	          if (obj.hasOwnProperty(keyArr[i])) {
+	            obj = obj[keyArr[i]];
+	          } else {
+	            hasKey = false;
+	          }
+	        }
+	
+	        if (!hasKey) {
+	          eval(codeStr + ' = []');
+	        }
+	
+	        eval(codeStr + '.push(' + _value + ')');
 	      }
-	
-	      return obj;
 	    }
 	  }]);
 	
@@ -331,47 +379,11 @@ var EOF =
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var DataProxy = function () {
-	  function DataProxy(target) {
-	    _classCallCheck(this, DataProxy);
-	
-	    this._target = target;
-	    this._handler = {};
-	  }
-	
-	  _createClass(DataProxy, [{
-	    key: 'setup',
-	    value: function setup() {
-	      return new Proxy(this._target, this._handler);
-	    }
-	  }, {
-	    key: 'handleSet',
-	    value: function handleSet(callback) {
-	      this._handler['set'] = callback;
-	    }
-	  }]);
-	
-	  return DataProxy;
-	}();
-	
-	exports.default = DataProxy;
-	module.exports = exports['default'];
-
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 	exports.arrUnique = arrUnique;
+	exports.getValFromExp = getValFromExp;
+	exports.objTree = objTree;
+	exports.removeObjProxy = removeObjProxy;
+	exports.isObjEqual = isObjEqual;
 	function arrUnique(arr) {
 	  var obj = {};
 	
@@ -382,6 +394,120 @@ var EOF =
 	
 	  return Object.keys(obj);
 	}
+	
+	function getValFromExp(obj, exp) {
+	  if (exp.indexOf('.') === -1) {
+	    return obj[exp] ? obj[exp] : '';
+	  } else {
+	    var expArr = exp.split('.');
+	    for (var i = 0; i < expArr.length; i++) {
+	      obj = obj[expArr[i]];
+	    }
+	
+	    return obj;
+	  }
+	}
+	
+	function objTree() {
+	  var target = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+	  var handler = {
+	    get: function get(target, key, receiver) {
+	      if (!(key in target)) {
+	        target[key] = objTree();
+	      }
+	
+	      return Reflect.get(target, key, receiver);
+	    }
+	  };
+	
+	  return new Proxy(target, handler);
+	}
+	
+	function removeObjProxy(obj) {
+	  var clone = {};
+	
+	  for (var key in obj) {
+	    if (key !== 'splice') {
+	      if (obj[key].toString() === "[object Object]") {
+	        clone[key] = removeObjProxy(obj[key]);
+	      } else {
+	        clone[key] = obj[key];
+	      }
+	    }
+	  }
+	
+	  return clone;
+	}
+	
+	function isObjEqual(a, b) {
+	  // Create arrays of property names
+	  var aProps = Object.getOwnPropertyNames(a);
+	  var bProps = Object.getOwnPropertyNames(b);
+	
+	  if (aProps.length != bProps.length) {
+	    return false;
+	  }
+	
+	  for (var i = 0; i < aProps.length; i++) {
+	    var propName = aProps[i];
+	
+	    // If values of same property are not equal,
+	    // objects are not equivalent
+	    if (a[propName] !== b[propName]) {
+	      return false;
+	    }
+	  }
+	
+	  return true;
+	}
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var DataProxy = function () {
+	  function DataProxy(target) {
+	    var handler = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	    _classCallCheck(this, DataProxy);
+	
+	    this._target = target;
+	    this._handler = handler;
+	  }
+	
+	  _createClass(DataProxy, [{
+	    key: 'setup',
+	    value: function setup() {
+	      var obj = arguments.length <= 0 || arguments[0] === undefined ? this._target : arguments[0];
+	
+	      for (var key in obj) {
+	        if (_typeof(obj[key]) === 'object') {
+	          obj[key] = this.setup(obj[key]);
+	        }
+	      }
+	
+	      return new Proxy(obj, this._handler);
+	    }
+	  }]);
+	
+	  return DataProxy;
+	}();
+	
+	exports.default = DataProxy;
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

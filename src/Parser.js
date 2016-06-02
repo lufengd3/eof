@@ -1,23 +1,22 @@
-import { arrUnique } from 'utils'
+import { arrUnique, getValFromExp, objTree, removeObjProxy } from 'utils'
 
 export default class parser {
   constructor(tpl, data) {
     this._data = data
     this._tpl = tpl
-    
+    this._dataKey = objTree()
   }
 
   parse() {
     let tplStr = this._tpl.innerHTML
-    let data = this._data
-    let dataKey = this._getDatakey()
-
-    let attrPattern = /\w*="{{[\s\w]*}}"/g
-    let textPattern = /[^"]{{[\s\w]*}}/g
+    let attrPattern = /\w*="{{[\s\w\.\-]*}}"/g
+    let textPattern = /[^"]{{[\s\w\.\-]*}}/g
     let attrMatch = tplStr.match(attrPattern)
     let textMatch = tplStr.match(textPattern)
     attrMatch = arrUnique(attrMatch)
     textMatch = arrUnique(textMatch)
+    
+    // replace order cannot change! replace attr first.
     
     /**
      * TODO:
@@ -35,12 +34,7 @@ export default class parser {
         attr: replace.elmAttr
       }
       
-      if (dataKey.hasOwnProperty(replace.key)) {
-        dataKey[replace.key].push(dataKeyItem)
-      } else {
-        this._data[replace.key] = null
-        dataKey[replace.key] = [dataKeyItem]
-      }
+      this._setDataKey(replace.key, dataKeyItem)
     }
 
     for (let i = 0; i < textMatch.length; i++) {
@@ -53,20 +47,14 @@ export default class parser {
         attr: null
       }
       
-      if (dataKey.hasOwnProperty(replace.key)) {
-        dataKey[replace.key].push(dataKeyItem)
-      } else {
-        this._data[replace.key] = null
-        dataKey[replace.key] = [dataKeyItem]
-      }
+      this._setDataKey(replace.key, dataKeyItem)
     }
     
     this._tpl.innerHTML = tplStr;
     
     return {
       tplContent: this._tpl.content,
-      dataKey: dataKey,
-      data: this._data  // padding obj
+      dataKey: removeObjProxy(this._dataKey)
     }
   }
   
@@ -78,8 +66,10 @@ export default class parser {
    */
   _replaceVar(replaceType, htmlStr, item) {
     let randKey = String(Math.random()).slice(2)
-    let variable = item.match(/{{\s*(\w*)\s*}}/)[1]
-    let value = this._data[variable] ? this._data[variable] : ''
+    let variable = item.match(/{{([\s\w\.\-]*)}}/)[1]
+    variable = variable.trim()
+    
+    let value = getValFromExp(this._data, variable)
     let pattern = new RegExp(item, 'g')
     let attr = null
     let replaceMent
@@ -92,8 +82,8 @@ export default class parser {
        * so data-bind-key just has singal quotation marks
        */
       let bindFlag = `data-bind-id="${randKey}`
-      replaceMent = item.replace(/{{\s*\w*\s*}}/, `${value}" ${bindFlag}`)
-      attr = item.match(/(\w*)=.*/)[1]      
+      replaceMent = item.replace(/{{[\s\w\.\-]*}}/, `${value}" ${bindFlag}`)
+      attr = item.match(/(\w*)=.*/)[1]   
     } else {
       /**
        * before: <p>hello {{ name }}</p>
@@ -113,15 +103,41 @@ export default class parser {
       elmAttr: attr
     }    
   }
-  
-  _getDatakey() {
-    let obj = {}
-    
-    for (let key in this._data) {
-      obj[key] = []
+
+  _setDataKey(key, value) {
+    let val = value    // ???
+    if (key.indexOf('.') === -1) {
+      if (this._dataKey.hasOwnProperty(key)) {
+        this._dataKey[key].push(value)
+      } else {
+        this._dataKey[key] = [value]
+      }
+    } else {
+      // console.log(value)   // undefined????
+      
+      let keyArr = key.split('.')
+      let keyLen = keyArr.length
+      let codeStr = 'this._dataKey'
+      let obj = this._dataKey
+      let hasKey = true
+      let value = JSON.stringify(val)
+      
+      for(let i = 0; i < keyLen; i++) {
+        codeStr += `["${keyArr[i]}"]`
+        if (obj.hasOwnProperty(keyArr[i])) {
+          obj = obj[keyArr[i]]
+        } else {
+          hasKey = false
+        }
+      }
+      
+      if (!hasKey) {
+        eval(`${codeStr} = []`)
+      }
+      
+      eval(`${codeStr}.push(${value})`)
     }
     
-    return obj
   }
   
 }

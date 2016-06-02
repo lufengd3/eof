@@ -1,5 +1,6 @@
 import Parser from 'Parser'
 import DataProxy from 'DataProxy'
+import { isObjEqual } from 'utils'
 
 export default class EOF {
   /**
@@ -11,9 +12,8 @@ export default class EOF {
 
     this._doc = document.currentScript.ownerDocument
     this._tpl = this._doc.querySelector(`#${elmId}`)
-    this._data = data
+    this.data = data
     this.name = elmId
-    this.$              // data proxy 
     this._dataKey
     
     this._init();
@@ -22,10 +22,9 @@ export default class EOF {
   _init() {
     let self = this
     let tpl = this._tpl
-    let tplParser = new Parser(tpl, this._data)
+    let tplParser = new Parser(tpl, this.data)
     let result = tplParser.parse()
     let tplContent = result.tplContent
-    this._data = result.data
     this._dataKey = result.dataKey
     
     if (!tpl) {
@@ -45,15 +44,36 @@ export default class EOF {
         }
       }
     })
-
+    
     document.registerElement(this.name, { prototype: proto })
   }
 
   _setDataProxy(doc) {
-    let setHandler = (target, key, value) => {
-      console.log(`set ${key} = ${value}`)
-      let idList = this._dataKey[key]
+    let handleSet = (target, key, value, receiver) => {
+      let idList, oldDataType
+      let newDataType = typeof value
+      
+      if (this._dataKey.hasOwnProperty(key)) {
+        idList = this._dataKey[key]
+        oldDataType = typeof this.data[key]
+      } else {
+        for (let k in this.data) {
+          if (isObjEqual(target, this.data[k])) {
+            idList = this._dataKey[k][key]
+            oldDataType = typeof this.data[k][key]
+          }
+        }
+      }
       let elms = []
+
+      // if (this.data[key] === value) {
+      if (0) {
+        return
+      } else if (oldDataType !== newDataType) {
+        throw new Error(`Can't change data type from ${oldDataType} to ${newDataType}`)
+      }
+
+      console.log(`set ${key}`)
       
       for (let i = idList.length; i--; ) {
         let id = idList[i]['id'] 
@@ -82,11 +102,19 @@ export default class EOF {
         }
         
       }
+      
+      return Reflect.set(target, key, value, receiver)
     }
     
-    let dataProxy = new DataProxy(this._data)
+    let handleDefine = (target, key, value, receiver) => {
+      console.log(`define ${key} = ${value}, receiver is ${receiver}`)
+    }
     
-    dataProxy.handleSet(setHandler)
-    this.$ = dataProxy.setup()
+    let dataProxy = new DataProxy(this.data, {
+      set: handleSet
+      // defineProperty: handleDefine      
+    })
+    
+    this.data = dataProxy.setup()
   }
 }

@@ -6,13 +6,19 @@
         }
     </style>
 
-    <input type="text" placeholder="Username" value="{{ username }}"/>
-    <input type="password" placeholder="Password" value="{{ password }}"/>
-    <p>用户名: {{ username }} 密码: {{ password }}</p>
+    <input type="text" placeholder="Username" value="{{ user.name }}"/>
+    <input type="password" placeholder="Password" value="{{ user.password }}"/>
+    <p>用户名: {{ user.name }} 密码: {{ user.password }}</p>
 </template>
 
 <script>
 (function() {
-    window.loginForm = new EOF('login-form', {username: 'lu'});
+    window.loginForm = new EOF('login-form', {
+      user: {
+        name: 'lufeng',
+        password: 'abcdefg',
+        arr: []
+      }
+    });
 })();
 </script>

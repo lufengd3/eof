@@ -1,15 +1,17 @@
 export default class DataProxy {
-  constructor(target) {
+  constructor(target, handler = {}) {
     this._target = target
-    this._handler = {}
+    this._handler = handler
   }
   
-  setup() {
-    return new Proxy(this._target, this._handler)
-  }
-  
-  handleSet(callback) {
-    this._handler['set'] = callback
+  setup(obj = this._target) {
+    for (let key in obj) {
+      if (typeof obj[key] === 'object') {
+        obj[key] = this.setup(obj[key])
+      }
+    }
+
+    return new Proxy(obj, this._handler)
   }
   
 }
