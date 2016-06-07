@@ -21,7 +21,7 @@ export default class EOF {
     this.lifeCB.created = conf.lifeCB.created || emptyFunc
     this.lifeCB.attached = conf.lifeCB.attached || emptyFunc
     this.lifeCB.detached = conf.lifeCB.detached || emptyFunc
-    this.lifeCB.attributeChanged = conf.lifeCB.attributeChanged || emptyFunc
+    this.lifeCB.attrChanged = conf.lifeCB.attrChanged || emptyFunc
 
     this._init();
   }
@@ -64,7 +64,7 @@ export default class EOF {
       },
       attributeChangedCallback: {
         value() {
-          self.lifeCB.attributeChanged()
+          self.lifeCB.attrChanged()
         }
       }
     })
