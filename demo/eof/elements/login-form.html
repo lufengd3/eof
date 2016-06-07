@@ -13,12 +13,26 @@
 
 <script>
 (function() {
-    window.loginForm = new EOF('login-form', {
+    let data = {
       user: {
         name: 'lufeng',
         password: 'abcdefg',
         arr: []
       }
-    });
+    }
+
+    let lifeCB = {
+      created() {
+        console.log('Created.')
+      },
+      attributeChanged() {
+        console.log('Attr changed.')
+      }
+    }
+
+    let conf = {data: data, lifeCB: lifeCB}
+
+    window.loginForm = new EOF('login-form', conf)
+
 })();
 </script>

@@ -5,17 +5,24 @@ import { isObjEqual } from 'utils'
 export default class EOF {
   /**
    * @param {String} elmId
-   * @param {Object} data
+   * @param {Object} conf
    */
-  constructor(elmId, data) {
+  constructor(elmId, conf) {
     this.version = '0.0.2'
 
     this._doc = document.currentScript.ownerDocument
     this._tpl = this._doc.querySelector(`#${elmId}`)
-    this.data = data
+    this.data = conf.data
     this.name = elmId
     this._dataKey
-    
+
+    let emptyFunc = () => {}
+    this.lifeCB = {}
+    this.lifeCB.created = conf.lifeCB.created || emptyFunc
+    this.lifeCB.attached = conf.lifeCB.attached || emptyFunc
+    this.lifeCB.detached = conf.lifeCB.detached || emptyFunc
+    this.lifeCB.attributeChanged = conf.lifeCB.attributeChanged || emptyFunc
+
     this._init();
   }
 
@@ -41,6 +48,23 @@ export default class EOF {
           
           shadowRoot.appendChild(clone)
           self._setDataProxy(shadowRoot)
+          // console.log(`Element <${self.name}> created.`)
+          self.lifeCB.created()
+        }
+      },
+      attachedCallback: {
+        value() {
+          self.lifeCB.attached()
+        }
+      },
+      detachedCallback: {
+        value() {
+          self.lifeCB.detached()
+        }
+      },
+      attributeChangedCallback: {
+        value() {
+          self.lifeCB.attributeChanged()
         }
       }
     })

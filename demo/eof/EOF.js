@@ -72,19 +72,28 @@ var EOF =
 	var EOF = function () {
 	  /**
 	   * @param {String} elmId
-	   * @param {Object} data
+	   * @param {Object} conf
 	   */
 	
-	  function EOF(elmId, data) {
+	  function EOF(elmId, conf) {
 	    _classCallCheck(this, EOF);
 	
 	    this.version = '0.0.2';
 	
 	    this._doc = document.currentScript.ownerDocument;
 	    this._tpl = this._doc.querySelector('#' + elmId);
-	    this.data = data;
+	    this.data = conf.data;
 	    this.name = elmId;
 	    this._dataKey;
+	
+	    var emptyFunc = function emptyFunc() {
+	      console.log('empty');
+	    };
+	    this.lifeCB = {};
+	    this.lifeCB.created = conf.lifeCB.created || emptyFunc;
+	    this.lifeCB.attached = conf.lifeCB.attached || emptyFunc;
+	    this.lifeCB.detached = conf.lifeCB.detached || emptyFunc;
+	    this.lifeCB.attributeChanged = conf.lifeCB.attributeChanged || emptyFunc;
 	
 	    this._init();
 	  }
@@ -113,6 +122,23 @@ var EOF =
 	
 	            shadowRoot.appendChild(clone);
 	            self._setDataProxy(shadowRoot);
+	            // console.log(`Element <${self.name}> created.`)
+	            self.lifeCB.created();
+	          }
+	        },
+	        attachedCallback: {
+	          value: function value() {
+	            self.lifeCB.attached();
+	          }
+	        },
+	        detachedCallback: {
+	          value: function value() {
+	            self.lifeCB.detached();
+	          }
+	        },
+	        attributeChangedCallback: {
+	          value: function value() {
+	            self.lifeCB.attributeChanged();
 	          }
 	        }
 	      });
